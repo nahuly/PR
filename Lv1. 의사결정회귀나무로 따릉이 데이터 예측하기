@@ -1,0 +1,67 @@
+# EDA
+
+import pandas as pd
+
+# 데이터 다운로드 링크로 데이터를 코랩에 불러옵니다.
+
+!wget 'https://bit.ly/3gLj0Q6'
+
+import zipfile
+with zipfile.ZipFile('3gLj0Q6', 'r') as existing_zip:
+    existing_zip.extractall('data')
+    
+train = pd.read_csv('data/train.csv')
+test = pd.read_csv('data/test.csv')
+
+train.shape
+test.shape
+
+train.head(10)
+
+#print('train.csv 데이터 프레임에서 각 데이터의 결측치 여부를 확인하는 코드를 작성해 보세요.')
+print(train.isnull())
+
+# print('train 데이터의 열별 결측치 수를 확인하는 코드를 작성해 보세요.')
+print(train.isnull().sum())
+
+train.info()
+test.info()
+
+# 결측치 제거
+train = train.dropna()
+test = test.dropna(0)
+
+#scikit-learn : https://scikit-learn.org/stable/
+
+import sklearn
+from sklearn.tree import DecisionTreeRegressor
+
+# 의사결정나무
+
+X_train = train.drop(['count'], axis = 1)
+Y_train = train['count']
+
+model = DecisionTreeRegressor
+model.fit(X_train, Y_train)
+
+pred = model.predict(test)
+pred[:5]
+
+# daicon에 낼 때
+
+submission = pd.read_csv('data/submission.csv')
+
+submission['count'] = pred
+
+submission.to_csv('sub.csv',index = False)
+
+
+
+
+
+
+
+
+
+
+
